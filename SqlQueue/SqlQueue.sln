@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlQueue.Core", "SqlQueue.Core\SqlQueue.Core.csproj", "{CA301A83-B240-4AA2-99EB-81539821451D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlQueue.Tests", "SqlQueue.Tests\SqlQueue.Tests.csproj", "{08C75F49-8F0B-43C3-8C17-51820E23B52D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA301A83-B240-4AA2-99EB-81539821451D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA301A83-B240-4AA2-99EB-81539821451D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA301A83-B240-4AA2-99EB-81539821451D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA301A83-B240-4AA2-99EB-81539821451D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08C75F49-8F0B-43C3-8C17-51820E23B52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08C75F49-8F0B-43C3-8C17-51820E23B52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08C75F49-8F0B-43C3-8C17-51820E23B52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08C75F49-8F0B-43C3-8C17-51820E23B52D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A508A1E-61F7-4561-A818-67FAA5F7C60F}
+	EndGlobalSection
+EndGlobal
