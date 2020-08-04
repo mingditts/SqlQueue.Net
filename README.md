@@ -4,7 +4,9 @@ A sql-based implementation of a competitor consumer queue pattern
 ### Usage (SqlServer)
 
 ```CSharp
-var queue = new SqlServerSqlQueue<int>(ConnectionString, SchemaName, QueueName);
+string ConnectionString = @"Server=.\SQLEXPRESS;Database=SqlQueueTests;Integrated security=True;";
+
+var queue = new SqlServerSqlQueue<int>(ConnectionString, "dbo", "Queue");
 
 queue.Enqueue(345);
 
