@@ -1,11 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlQueue.Core", "SqlQueue.Core\SqlQueue.Core.csproj", "{CA301A83-B240-4AA2-99EB-81539821451D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlQueue", "SqlQueue\SqlQueue.csproj", "{CA301A83-B240-4AA2-99EB-81539821451D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlQueue.Tests", "SqlQueue.Tests\SqlQueue.Tests.csproj", "{08C75F49-8F0B-43C3-8C17-51820E23B52D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlQueue.Tests", "SqlQueue.Tests\SqlQueue.Tests.csproj", "{08C75F49-8F0B-43C3-8C17-51820E23B52D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

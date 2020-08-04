@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
-namespace SqlQueue.Core
+namespace SqlQueue.Core.SqlServer
 {
-	public class SqlQueue<T> : ISqlQueue<T>
+	public class SqlServerSqlQueue<T> : ISqlQueue<T>
 	{
 		public string ConnectionString { get; private set; }
 
@@ -15,7 +16,7 @@ namespace SqlQueue.Core
 
 		private static Dictionary<string, bool> creationDictionary = new Dictionary<string, bool>();
 
-		public SqlQueue(string connectionString, string schema, string name)
+		public SqlServerSqlQueue(string connectionString, string schema, string name)
 		{
 			#region Arguments check
 
@@ -64,7 +65,8 @@ namespace SqlQueue.Core
 			long? id = null;
 
 			var updateInfo = this.ExecuteFetch(
-				$"UPDATE QUEUE SET QUEUE.Status = 1 OUTPUT (CONCAT(INSERTED.Id, '_') + INSERTED.Data) OUT FROM (SELECT TOP 1 * FROM [{this.Schema}].[{ this.Name}] WHERE Status = 0) QUEUE"
+				$"UPDATE QUEUE SET QUEUE.Status = 1 OUTPUT (CONCAT(INSERTED.Id, '_') + INSERTED.Data) OUT FROM (SELECT TOP 1 * FROM [{this.Schema}].[{ this.Name}] WHERE Status = 0) QUEUE",
+				transaction
 			);
 
 			if (updateInfo == null)
@@ -97,7 +99,7 @@ namespace SqlQueue.Core
 
 		public int Count()
 		{
-			return this.ExecuteScalar($"SELECT COUNT(Id) FROM [{this.Schema}].[{this.Name}]");
+			return this.ExecuteScalar($"SELECT COUNT(Id) FROM [{this.Schema}].[{this.Name}]", IsolationLevel.ReadUncommitted);
 		}
 
 		public void ResetAllStatuses(DateTimeOffset? from)
@@ -166,11 +168,30 @@ namespace SqlQueue.Core
 		{
 			Tuple<Int64, T> info = null;
 
-			using (var sqlConnection = new SqlConnection(this.ConnectionString))
+			if (transaction == null)
 			{
-				sqlConnection.Open();
+				using (var sqlConnection = new SqlConnection(this.ConnectionString))
+				{
+					sqlConnection.Open();
 
-				using (var sqlCommand = new SqlCommand(sql, sqlConnection, transaction))
+					using (var sqlCommand = new SqlCommand(sql, sqlConnection, transaction))
+					{
+						string outInfo = (string)sqlCommand.ExecuteScalar();
+
+						if (outInfo == null)
+						{
+							return null;
+						}
+
+						var pieces = outInfo.Split(new[] { '_' }, 2);
+
+						info = new Tuple<long, T>(Convert.ToInt64(pieces[0]), JsonConvert.DeserializeObject<T>(pieces[1]));
+					}
+				}
+			}
+			else
+			{
+				using (var sqlCommand = new SqlCommand(sql, transaction.Connection, transaction))
 				{
 					string outInfo = (string)sqlCommand.ExecuteScalar();
 
@@ -188,31 +209,50 @@ namespace SqlQueue.Core
 			return info;
 		}
 
-		private int ExecuteScalar(string sql)
+		private int ExecuteScalar(string sql, IsolationLevel isolationLevel)
 		{
 			using (var sqlConnection = new SqlConnection(this.ConnectionString))
 			{
 				sqlConnection.Open();
 
-				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				using (var transaction = sqlConnection.BeginTransaction(isolationLevel))
 				{
-					return (int)sqlCommand.ExecuteScalar();
+					using (var sqlCommand = new SqlCommand(sql, sqlConnection, transaction))
+					{
+						return (int)sqlCommand.ExecuteScalar();
+					}
 				}
 			}
 		}
 
 		private void ExecuteSql(string sql, List<SqlParameter> parameters = null, SqlTransaction transaction = null)
 		{
-			using (var sqlConnection = new SqlConnection(this.ConnectionString))
+			if (transaction == null)
 			{
-				sqlConnection.Open();
+				using (var sqlConnection = new SqlConnection(this.ConnectionString))
+				{
+					sqlConnection.Open();
 
-				using (var sqlCommand = new SqlCommand(sql, sqlConnection, transaction))
+					using (var sqlCommand = new SqlCommand(sql, sqlConnection, transaction))
+					{
+						if (parameters != null)
+						{
+							sqlCommand.Parameters.AddRange(parameters.ToArray());
+						}
+
+						sqlCommand.ExecuteNonQuery();
+					}
+				}
+			}
+			else
+			{
+				using (var sqlCommand = new SqlCommand(sql, transaction.Connection, transaction))
 				{
 					if (parameters != null)
 					{
 						sqlCommand.Parameters.AddRange(parameters.ToArray());
 					}
+
 					sqlCommand.ExecuteNonQuery();
 				}
 			}

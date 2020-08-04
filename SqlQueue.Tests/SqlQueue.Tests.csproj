@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlQueue.Core\SqlQueue.Core.csproj" />
+    <ProjectReference Include="..\SqlQueue\SqlQueue.csproj" />
   </ItemGroup>
 
 </Project>
