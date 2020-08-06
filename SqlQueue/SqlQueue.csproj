@@ -4,6 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>SqlQueue</AssemblyName>
     <RootNamespace>SqlQueue</RootNamespace>
+    <RepositoryUrl>https://github.com/mingditts/SqlQueue.Net</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/mingditts/SqlQueue.Net</PackageProjectUrl>
+    <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

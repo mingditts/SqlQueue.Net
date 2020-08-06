@@ -16,7 +16,7 @@ namespace SqlQueue.Core.SqlServer
 
 		private static Dictionary<string, bool> creationDictionary = new Dictionary<string, bool>();
 
-		public SqlServerSqlQueue(string connectionString, string schema, string name)
+		public SqlServerSqlQueue(string connectionString, string schema, string name, bool createIfNotExists = true)
 		{
 			#region Arguments check
 
@@ -43,7 +43,10 @@ namespace SqlQueue.Core.SqlServer
 
 			this.Name = name;
 
-			this.EnsureCreated();
+			if (createIfNotExists)
+			{
+				this.EnsureCreated();
+			}
 		}
 
 		public void Enqueue(T element, SqlTransaction transaction = null)

@@ -11,7 +11,7 @@ namespace SqlQueue.Tests.SqlServer
 	[Description("Test of SqlServerSqlQueue class.")]
 	public class SqlServerSqlQueueTest
 	{
-		private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=SqlQueueTests;Integrated security=True;MultipleActiveResultSets=true";
+		private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=SqlQueueTests;Integrated security=True;";
 		private const string SchemaName = "dbo";
 		private readonly string QueueName = "Queue";
 
